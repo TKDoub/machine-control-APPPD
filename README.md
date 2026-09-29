@@ -1,34 +1,21 @@
-# FDM Machine Klipper Configuration
+# Multi-function machine configuration
 
-Starter project for a custom multi-function machine controlled by Klipper. All hardware-dependent configuration is intentionally disabled until wiring, pins, CAN UUIDs, mechanical values, and safety behavior are verified.
+electronics.md and configuration_data.md in docs are the two authoritative inputs.
+The modular klipper/printer.cfg replaces the generic Cartesian example.
+Hardware sections are fully populated where data exists but COMMENTED: this is not
+a runnable or commissioned machine configuration. TBD identifies missing inputs.
+Resolve the list in configuration_data.md before enabling sections individually.
+No firmware was flashed and no running machine was changed.
 
-## Layout
+## Commissioning order
+1. Record actual CAN UUIDs and verify the 1 Mbit/s bus and board identities.
+2. Verify wiring/GPIO translations and enter motor currents, directions and limits.
+3. Check inputs, then commission individual motors and the supported Z probe.
+4. Confirm auxiliary roles, gear ratios, servo limits and power switching.
+5. Complete temperature sensor parameters and heater tuning before thermal use.
+6. Implement operating macros only after all relevant mechanisms are commissioned.
 
-```text
-docs/electronics.md       Hardware allocation source of truth
-klipper/printer.cfg       Top-level include file
-klipper/mcu/              CAN MCU connection definitions
-klipper/motion/           Kinematic and auxiliary motion
-klipper/macros/           Operator and commissioning macros
-klipper/sensors/          Load-cell and strain-gauge inputs
-notes/decisions.md        Engineering decisions and open questions
-```
-
-## Before use
-
-1. Resolve every `CONFLICT` and `TBD` in `docs/electronics.md`.
-2. Insert the four CAN UUIDs in the MCU files.
-3. Confirm the CAN bitrate is identical for every node and the host interface.
-4. Verify every pin against the exact board revision and physical wiring.
-5. Fill in motion geometry, driver currents, endstop polarity, and safe limits.
-6. Enable and test one subsystem at a time, beginning with communications and inputs. Test heaters last.
-
-The placeholder files contain comments only, so this scaffold does not command hardware as delivered.
-
-## Recovered known conflicts
-
-- Vise servo 0 and vise servo 1 were both listed on MCU0 `PE9`.
-- Z motor 0 and Z motor 1 were both listed on MCU0 `driver2`.
-
-These assignments are documented but deliberately not implemented.
+Pin mappings were checked against the upstream sources linked in electronics.md.
+Local validation checks include targets, table completeness, and GPIO reuse;
+it does not substitute for Klipper startup or physical tests.
 
